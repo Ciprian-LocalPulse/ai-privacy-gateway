@@ -1,5 +1,8 @@
 # AI Privacy Gateway
-![AI Privacy Gateway Banner](assets/baner.png)
+<a href="https://github.com/Ciprian-LocalPulse/ai-privacy-gateway">
+  <img src="assets/baner.png" alt="AI Privacy Gateway Banner" style="width:100%;">
+</a>
+
 > Enterprise-grade AI Privacy Gateway for secure, provider-agnostic LLM access.
 
 ![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
