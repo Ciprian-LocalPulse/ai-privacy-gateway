@@ -1,0 +1,71 @@
+# AI Privacy Gateway — healthcare / HIPAA-oriented policy pack
+#
+# Modeled loosely on the U.S. HIPAA Privacy Rule's Safe Harbor method
+# (45 CFR §164.514(b)(2)), which lists 18 identifier categories that must
+# be removed for data to be considered de-identified. This pack is a
+# starting point, NOT a certification — a covered entity's compliance
+# officer/DPO must still sign off on any specific deployment.
+#
+# Design choice: this pack favors reversible tokenize/synthetic over
+# blocking, because most legitimate clinical-documentation use cases
+# (e.g. "help me phrase this discharge summary") need the PHI to
+# round-trip, just not to be visible to the external LLM provider.
+
+name: healthcare-hipaa
+description: >
+  Strict de-identification pack aligned with HIPAA Safe Harbor's
+  identifier categories. Treats direct identifiers and clinical context
+  as high-risk PHI by default; favors low confidence thresholds (i.e.
+  redacts even on a weaker signal) over the general-purpose default pack.
+jurisdiction: US-HIPAA
+default_action: mask
+
+entity_policies:
+  EMAIL:
+    action: tokenize
+    min_confidence: 0.6
+  PHONE_NUMBER:
+    action: tokenize
+    min_confidence: 0.5
+  PERSON_NAME:
+    action: synthetic
+    min_confidence: 0.4
+  ORGANIZATION:
+    action: synthetic
+    min_confidence: 0.5
+  ADDRESS:
+    action: synthetic
+    min_confidence: 0.4
+  US_SSN:
+    action: tokenize
+    min_confidence: 0.9
+  RO_CNP:
+    action: tokenize
+    min_confidence: 0.9
+  PASSPORT_NUMBER:
+    action: tokenize
+    min_confidence: 0.6
+  ICD10_CODE:
+    action: tokenize
+    min_confidence: 0.5
+  MEDICAL_CONTEXT:
+    action: mask
+    min_confidence: 0.5
+  CREDIT_CARD:
+    action: mask
+    min_confidence: 0.9
+  IBAN:
+    action: tokenize
+    min_confidence: 0.9
+  API_KEY:
+    action: mask
+    min_confidence: 0.8
+  GENERIC_SECRET:
+    action: mask
+    min_confidence: 0.6
+
+# This pack intentionally does not block on any type by default — see
+# rationale above. Add types here if your organization's policy is that
+# some category (e.g. psychiatric notes) must never reach a third party
+# in any form, even tokenized.
+block_on_types: []

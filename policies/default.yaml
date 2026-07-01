@@ -1,0 +1,77 @@
+# AI Privacy Gateway — default policy pack
+#
+# A balanced starting point for general enterprise use. Prefers
+# reversible tokenization for hard identifiers (so the user still gets a
+# coherent answer that references "their" IBAN/CNP), synthetic
+# replacement for free-text identity data (so the LLM's prose stays
+# fluent), and hard masking for anything that should never round-trip in
+# any form (secrets).
+#
+# See docs/policy-configuration.md for the full authoring guide and
+# docs/compliance-gdpr-mapping.md for how each action maps to GDPR
+# pseudonymization/anonymization concepts.
+
+name: default
+description: >
+  Balanced general-purpose policy: reversible tokenization for hard
+  identifiers, synthetic replacement for free-text personal data, hard
+  masking for secrets and payment card data.
+jurisdiction: null
+default_action: mask
+
+entity_policies:
+  EMAIL:
+    action: tokenize
+    min_confidence: 0.7
+  PHONE_NUMBER:
+    action: tokenize
+    min_confidence: 0.6
+  PERSON_NAME:
+    action: synthetic
+    min_confidence: 0.55
+  ORGANIZATION:
+    action: allow
+    min_confidence: 0.6
+  ADDRESS:
+    action: synthetic
+    min_confidence: 0.5
+  RO_CNP:
+    action: tokenize
+    min_confidence: 0.9
+  US_SSN:
+    action: tokenize
+    min_confidence: 0.9
+  PASSPORT_NUMBER:
+    action: tokenize
+    min_confidence: 0.7
+  IBAN:
+    action: tokenize
+    min_confidence: 0.9
+  CREDIT_CARD:
+    action: mask
+    min_confidence: 0.9
+  EU_VAT_NUMBER:
+    action: allow
+    min_confidence: 0.7
+  CRYPTO_WALLET:
+    action: tokenize
+    min_confidence: 0.8
+  ICD10_CODE:
+    action: mask
+    min_confidence: 0.6
+  MEDICAL_CONTEXT:
+    action: allow
+    min_confidence: 0.6
+  API_KEY:
+    action: mask
+    min_confidence: 0.8
+  GENERIC_SECRET:
+    action: mask
+    min_confidence: 0.7
+
+# Requests containing these entity types are rejected outright (HTTP 422)
+# instead of anonymized and forwarded — pasting a live API key into a
+# chat prompt is almost always a mistake worth surfacing to the caller,
+# not silently fixing.
+block_on_types:
+  - API_KEY

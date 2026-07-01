@@ -1,0 +1,78 @@
+# ==========================================
+# Fișiere sistem și compilare Python
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# ==========================================
+# Medii virtuale (Virtual Environments)
+# ==========================================
+.venv/
+venv/
+ENV/
+env/
+# Cache-uri de dependințe
+.pep517/
+
+# ==========================================
+# Secrete și Configurații Locale (CRITIC!)
+# ==========================================
+# Nu vrei ca cheile tale API (OpenAI/Anthropic) să ajungă publice
+.env
+.env.*
+*.pem
+*.key
+certs/
+secrets/
+local_settings.py
+
+# ==========================================
+# Cache-uri de testare și unelte de cod (Linting)
+# ==========================================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.black/
+.coverage
+htmlcov/
+
+# ==========================================
+# Distribuție și Pachete (dacă generezi build-uri)
+# ==========================================
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ==========================================
+# Configurații IDE (Editor Code)
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+.project
+.pydevproject
+
+# ==========================================
+# Fișiere specifice Sistemului de Operare
+# ==========================================
+.DS_Store
+Thumbs.db
+Desktop.ini

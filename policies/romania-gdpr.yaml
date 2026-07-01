@@ -1,0 +1,66 @@
+# AI Privacy Gateway — Romania / GDPR-oriented policy pack
+#
+# Tuned for the specific identifier landscape of Romanian personal data.
+# The CNP (Cod Numeric Personal) is treated as maximally sensitive: under
+# Romanian implementing law (Law 190/2018, Art. 4), the CNP may only be
+# processed under specific legal conditions since it functions as a
+# universal correlator across essentially every Romanian institution and
+# database — leaking it is materially worse than leaking a generic
+# account number.
+
+name: romania-gdpr
+description: >
+  Policy pack for Romanian personal data under GDPR. Treats the CNP as a
+  special-risk universal identifier (reversible tokenization at a high
+  confidence threshold), and applies synthetic replacement to free-text
+  identity data so that translated/paraphrased business correspondence
+  still reads naturally after anonymization.
+jurisdiction: EU-GDPR-RO
+default_action: mask
+
+entity_policies:
+  RO_CNP:
+    action: tokenize
+    min_confidence: 0.95
+  EMAIL:
+    action: tokenize
+    min_confidence: 0.7
+  PHONE_NUMBER:
+    action: tokenize
+    min_confidence: 0.6
+  PERSON_NAME:
+    action: synthetic
+    min_confidence: 0.5
+  ADDRESS:
+    action: synthetic
+    min_confidence: 0.5
+  ORGANIZATION:
+    action: allow
+    min_confidence: 0.6
+  IBAN:
+    action: tokenize
+    min_confidence: 0.9
+  CREDIT_CARD:
+    action: mask
+    min_confidence: 0.9
+  EU_VAT_NUMBER:
+    action: allow
+    min_confidence: 0.7
+  PASSPORT_NUMBER:
+    action: tokenize
+    min_confidence: 0.7
+  MEDICAL_CONTEXT:
+    action: mask
+    min_confidence: 0.5
+  ICD10_CODE:
+    action: tokenize
+    min_confidence: 0.5
+  API_KEY:
+    action: mask
+    min_confidence: 0.8
+  GENERIC_SECRET:
+    action: mask
+    min_confidence: 0.7
+
+block_on_types:
+  - API_KEY

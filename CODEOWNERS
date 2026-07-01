@@ -1,0 +1,11 @@
+
+Global owners for the whole repository
+@Ciprian-LocalPulse
+
+Core data masking logic requires strict authorization
+/ai_privacy_gateway/anonymizer/   @Ciprian-LocalPulse
+/ai_privacy_gateway/proxy/        @Ciprian-LocalPulse
+
+Regulatory compliance packs
+/policies/                       @Ciprian-LocalPulse
+"""

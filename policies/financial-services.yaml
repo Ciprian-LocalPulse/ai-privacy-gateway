@@ -1,0 +1,63 @@
+# AI Privacy Gateway — financial services policy pack
+#
+# Loosely aligned with PCI-DSS's core principle for cardholder data:
+# a full Primary Account Number should never transit a system outside
+# the Cardholder Data Environment, even transiently — anonymizing and
+# forwarding is *not* an acceptable substitute for that control, so this
+# pack blocks the request outright rather than tokenizing card numbers.
+# Other financial identifiers (IBAN, crypto wallets) are tokenized
+# instead, since those don't carry the same "must never transit" rule.
+
+name: financial-services
+description: >
+  Policy pack for financial services. Blocks requests containing
+  payment card numbers or live API credentials outright (PCI-DSS-style
+  "never transit" posture); tokenizes account-level financial
+  identifiers; allows organization names through since financial
+  analysis prompts usually depend on naming the companies involved.
+jurisdiction: null
+default_action: mask
+
+entity_policies:
+  CREDIT_CARD:
+    action: mask
+    min_confidence: 0.85
+  IBAN:
+    action: tokenize
+    min_confidence: 0.85
+  CRYPTO_WALLET:
+    action: tokenize
+    min_confidence: 0.8
+  EU_VAT_NUMBER:
+    action: allow
+    min_confidence: 0.7
+  RO_CNP:
+    action: tokenize
+    min_confidence: 0.9
+  US_SSN:
+    action: tokenize
+    min_confidence: 0.9
+  PERSON_NAME:
+    action: synthetic
+    min_confidence: 0.5
+  ORGANIZATION:
+    action: allow
+    min_confidence: 0.6
+  EMAIL:
+    action: tokenize
+    min_confidence: 0.7
+  PHONE_NUMBER:
+    action: tokenize
+    min_confidence: 0.6
+  API_KEY:
+    action: mask
+    min_confidence: 0.8
+  GENERIC_SECRET:
+    action: mask
+    min_confidence: 0.7
+
+# Reject the request instead of anonymizing-and-forwarding for these
+# categories — see module docstring for rationale.
+block_on_types:
+  - CREDIT_CARD
+  - API_KEY
